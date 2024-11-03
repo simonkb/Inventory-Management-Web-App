@@ -23,6 +23,7 @@ import {
   deleteInventory,
   fetchProducts,
   fetchWarehouses,
+  createWarehouse
 } from "../services/api";
 import defaultProductImage from "../images/default.jpg";
 
@@ -31,6 +32,9 @@ const InventoryPage = ({onLogout}) => {
   const [products, setProducts] = useState([]);
   const [warehouses, setWarehouses] = useState([]);
   const [editId, setEditId] = useState(null);
+  const [showNewWarehouseField, setShowNewWarehouseField] = useState(false); 
+  const [newWarehouseName, setNewWarehouseName] = useState(""); 
+
   const [newInventory, setNewInventory] = useState({
     product: "",
     warehouse: "",
@@ -145,7 +149,28 @@ const InventoryPage = ({onLogout}) => {
       console.error("Error adding new inventory:", error);
     }
   };
-
+  const handleWarehouseChange = (e) => {
+    const selectedWarehouse = e.target.value;
+    if (selectedWarehouse === "add_new") {
+      setShowNewWarehouseField(true);
+    } else {
+      setShowNewWarehouseField(false);
+      setNewInventory((prev) => ({ ...prev, warehouse: selectedWarehouse }));
+    }
+  };
+  const handleAddNewWarehouse = async () => {
+    if (newWarehouseName.trim()) {
+      try {
+        const response = await createWarehouse({ name: newWarehouseName });
+        setWarehouses((prev) => [...prev, response.data]);
+        setNewInventory((prev) => ({ ...prev, warehouse: response.data.id }));
+        setNewWarehouseName("");
+        setShowNewWarehouseField(false);
+      } catch (error) {
+        console.error("Error adding new warehouse:", error);
+      }
+    }
+  };
 
   return (
     <>
@@ -365,12 +390,12 @@ const InventoryPage = ({onLogout}) => {
                   </Select>
                 </FormControl>
               </TableCell>
-              <TableCell>
+            <TableCell>
                 <FormControl fullWidth>
                   <Select
                     name="warehouse"
                     value={newInventory.warehouse}
-                    onChange={handleNewInventoryChange}
+                    onChange={handleWarehouseChange}
                     displayEmpty
                   >
                     <MenuItem value="">
@@ -381,9 +406,31 @@ const InventoryPage = ({onLogout}) => {
                         {warehouse.name}
                       </MenuItem>
                     ))}
+                    <MenuItem value="add_new" color="primary">
+                      + New Warehouse
+                    </MenuItem>
                   </Select>
                 </FormControl>
+                {showNewWarehouseField && (
+                  <div>
+                    <TextField
+                      label="New Warehouse Name"
+                      value={newWarehouseName}
+                      onChange={(e) => setNewWarehouseName(e.target.value)}
+                      fullWidth
+                      margin="normal"
+                    />
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleAddNewWarehouse}
+                    >
+                      Add Warehouse
+                    </Button>
+                  </div>
+                )}
               </TableCell>
+
               <TableCell>
                 <TextField
                   name="logistic_codification"

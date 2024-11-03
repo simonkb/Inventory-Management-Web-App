@@ -34,6 +34,7 @@ export const deleteInventory = (id) => api.delete(`/inventory/${id}/`);
 
 export const fetchProducts = () => api.get("/products/");
 export const fetchWarehouses = () => api.get("/warehouses/");
+export const createWarehouse = (data) => api.post('/warehouses/', data); 
 export const updateProduct = (id, data) => api.put(`/products/${id}/`, data);
 export const fetchProductVariations = () => api.get('/product-variations/');
 export const createProductVariation = (data) => api.post('/product-variations/', data);
