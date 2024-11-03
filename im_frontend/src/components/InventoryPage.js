@@ -505,8 +505,19 @@ const InventoryPage = ({onLogout}) => {
         </Table>
       </TableContainer>
       <Button
+        variant="contained"
+        color="primary"
+        onClick={()=>{navigate(-1)}}
+        style={{ margin: 16 }}
+      >
+        Back
+      </Button>
+
+      <Button
+        variant="contained"
         onClick={onLogout}
         color="secondary"
+        style={{ margin: 16 }}
       >
         Logout
       </Button>
