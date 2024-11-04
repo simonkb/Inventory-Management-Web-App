@@ -50,7 +50,7 @@ function App() {
             element={isAuthenticated ? <LandingPage /> : <Navigate to="/" />}
           />
           <Route
-            path="/inventory/"
+            path="/inventory/:clientId"
             element={
               isAuthenticated ? (
                 <InventoryPage onLogout={handleLogout} />

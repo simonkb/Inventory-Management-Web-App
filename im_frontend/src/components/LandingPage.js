@@ -32,7 +32,7 @@ const LandingPage = () => {
   };
 
   const handleClientClick = (clientId) => {
-    navigate(`/inventory/`);
+    navigate(`/inventory/${clientId}`);
   };
 
   const handleCreateClient = async () => {
@@ -45,7 +45,7 @@ const LandingPage = () => {
 
   return (
     <Paper style={{ padding: 24 }}>
-      <Typography variant="h4" align="center" gutterBottom>Selct Category      </Typography>
+      <Typography variant="h4" align="center" gutterBottom>Select Category      </Typography>
 
       <div style={{ display: "flex", justifyContent: "space-around", marginTop: 100 }}>
         <Button variant="contained" color="primary" onClick={() => handleCategorySelect("Business Owner")}>

@@ -28,6 +28,15 @@ api.interceptors.response.use(
 );
 
 export const fetchInventories = () => api.get("/inventory/");
+export const fetchInventoriesBySupplier = async (clientId) => {
+  try {
+    const response = await api.get(`/inventories/by-client/${clientId}/`);
+    return response;
+  } catch (error) {
+    console.error('Error fetching inventories:', error);
+  }
+};
+
 export const createInventory = (data) => api.post("/inventory/", data);
 export const updateInventory = (id, data) => api.put(`/inventory/${id}/`, data);
 export const deleteInventory = (id) => api.delete(`/inventory/${id}/`);
@@ -41,11 +50,7 @@ export const createProductVariation = (data) => api.post('/product-variations/',
 export const createProduct = (data) => api.post('/products/', data); 
 
 export const fetchSuppliers = () => {
-  console.log("Request headers:", api.defaults.headers.common); 
-
   return api.get('/suppliers/');
 };
-
 export const createSupplier = (data) => api.post('/suppliers/', data);
-
 export default api;

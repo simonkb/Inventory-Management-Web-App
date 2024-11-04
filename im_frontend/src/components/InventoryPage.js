@@ -15,25 +15,25 @@ import {
   Button,
 } from "@mui/material";
 import { Add, Delete, Edit, Save, Cancel } from "@mui/icons-material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
-  fetchInventories,
   createInventory,
   updateInventory,
   deleteInventory,
   fetchProducts,
   fetchWarehouses,
-  createWarehouse
+  createWarehouse,
+  fetchInventoriesBySupplier,
 } from "../services/api";
 import defaultProductImage from "../images/default.jpg";
 
-const InventoryPage = ({onLogout}) => {
+const InventoryPage = ({ onLogout }) => {
   const [inventories, setInventories] = useState([]);
   const [products, setProducts] = useState([]);
   const [warehouses, setWarehouses] = useState([]);
   const [editId, setEditId] = useState(null);
-  const [showNewWarehouseField, setShowNewWarehouseField] = useState(false); 
-  const [newWarehouseName, setNewWarehouseName] = useState(""); 
+  const [showNewWarehouseField, setShowNewWarehouseField] = useState(false);
+  const [newWarehouseName, setNewWarehouseName] = useState("");
 
   const [newInventory, setNewInventory] = useState({
     product: "",
@@ -48,6 +48,7 @@ const InventoryPage = ({onLogout}) => {
     total_predicted_inventory_value: 0,
   });
   const navigate = useNavigate();
+  const { clientId } = useParams();
 
   useEffect(() => {
     loadData();
@@ -56,7 +57,7 @@ const InventoryPage = ({onLogout}) => {
   const loadData = async () => {
     try {
       const [inventoryData, productData, warehouseData] = await Promise.all([
-        fetchInventories(),
+        fetchInventoriesBySupplier(clientId),
         fetchProducts(),
         fetchWarehouses(),
       ]);
@@ -175,22 +176,31 @@ const InventoryPage = ({onLogout}) => {
   return (
     <>
       <TableContainer component={Paper}>
-      <h1><center>Inventory Management</center></h1>
+        <h1>
+          <center>Inventory Management</center>
+        </h1>
 
         <Table>
           <TableHead>
+            
             <TableRow>
-              <TableCell>Product</TableCell>
-              <TableCell>Warehouse</TableCell>
-              <TableCell>Logistic Codification</TableCell>
-              <TableCell>Inventory Date</TableCell>
-              <TableCell>Inventory on Hand</TableCell>
-              <TableCell>Value per Unit</TableCell>
-              <TableCell>Inventory on Hand Value</TableCell>
-              <TableCell>In Progress Delivery</TableCell>
-              <TableCell>Total Predicted Inventory</TableCell>
-              <TableCell>Total Predicted Inventory Value</TableCell>
-              <TableCell>Actions</TableCell>
+              {[
+                "Product",
+                "Warehouse",
+                "Logistic Codification",
+                "Inventory Date",
+                "Inventory on Hand",
+                "Value per Unit",
+                "Inventory on Hand Value",
+                "In Progress Delivery",
+                "Total Predicted Inventory",
+                "Total Predicted Inventory Value",
+                "Actions",
+              ].map((header) => (
+                <TableCell key={header} sx={headerCellStyle}>
+                  {header}
+                </TableCell>
+              ))}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -390,7 +400,7 @@ const InventoryPage = ({onLogout}) => {
                   </Select>
                 </FormControl>
               </TableCell>
-            <TableCell>
+              <TableCell>
                 <FormControl fullWidth>
                   <Select
                     name="warehouse"
@@ -496,7 +506,7 @@ const InventoryPage = ({onLogout}) => {
                 />
               </TableCell>
               <TableCell>
-                <Button onClick={handleAddNewInventory} startIcon={<Add/>}>
+                <Button onClick={handleAddNewInventory} startIcon={<Add />}>
                   Add
                 </Button>
               </TableCell>
@@ -507,7 +517,9 @@ const InventoryPage = ({onLogout}) => {
       <Button
         variant="contained"
         color="primary"
-        onClick={()=>{navigate(-1)}}
+        onClick={() => {
+          navigate(-1);
+        }}
         style={{ margin: 16 }}
       >
         Back
@@ -523,6 +535,13 @@ const InventoryPage = ({onLogout}) => {
       </Button>
     </>
   );
+};
+const headerCellStyle = {
+  color: "#000",
+  fontWeight: "bold",
+  fontSize: "1rem",
+  textAlign: "center",
+  
 };
 
 export default InventoryPage;

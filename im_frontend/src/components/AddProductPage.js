@@ -78,11 +78,11 @@ const AddProductPage = () => {
       product_variation: variationId,
       supplier: supplierId,
     });
-    navigate("/");
+    navigate(-1);
   };
 
   const handleCancel = () => {
-    navigate("/");
+    navigate(-1);
   };
 
   return (
@@ -233,7 +233,6 @@ const AddProductPage = () => {
         </div>
       )}
 
-      {/* Supplier Selection */}
       <FormControl fullWidth margin="normal">
         <Select
           name="supplier"

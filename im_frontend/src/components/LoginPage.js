@@ -20,7 +20,7 @@ const LoginPage = ({ setIsAuthenticated }) => {
 
       setIsAuthenticated(true);
 
-      navigate('/inventory');
+      navigate('/landing');
     } catch (error) {
       setError('Invalid username or password');
     }

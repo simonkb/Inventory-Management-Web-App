@@ -24,12 +24,12 @@ const ProductDetailPage = () => {
     setProduct((prev) => ({ ...prev, [name]: value }));
   };
   const handleCancel = async ()=>{
-    navigate("/inventory");
+    navigate(-1);
   }
 
   const handleSave = async () => {
     await updateProduct(product.id, product);
-    navigate("/inventory");
+    navigate(-1);
   };
 
   if (!product) return <p>Loading product...</p>;
